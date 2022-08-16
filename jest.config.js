@@ -1,19 +1,18 @@
 module.exports = {
   collectCoverageFrom: ['<rootdir>/src/**/*.ts'],
-  coverageDirectory: "coverage",
-  coverageProvider: "babel",
+  coverageDirectory: 'coverage',
+  coverageProvider: 'babel',
   moduleNameMapper: {
-  '@/tests/(.+)': '<rootDir>/tests/$1',
-  '@/(.+)': '<rootDir>/src/$1',
+    '@/tests/(.+)': '<rootDir>/tests/$1',
+    '@/(.+)': '<rootDir>/src/$1'
   },
   roots: [
     '<rootDir>/src',
     '<rootDir>/tests'
   ],
-    transform: {
-      '\\.ts$': 'ts-jest'
-    },
-
+  transform: {
+    '\\.ts$': 'ts-jest'
+  }
 
   // A list of reporter names that Jest uses when writing coverage reports
   // coverageReporters: [
@@ -174,4 +173,4 @@ module.exports = {
 
   // Whether to use watchman for file crawling
   // watchman: true,
-};
+}
