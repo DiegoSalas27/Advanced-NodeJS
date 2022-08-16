@@ -1,10 +1,14 @@
+import { AuthenticationError } from '@/domain/errors'
 import { FacebookAuthentication } from '@/domain/features'
-import { LoadFacebookUserApi } from '../protocols/load-facebook-user-api'
+import { LoadFacebookUserApi } from '../contracts/apis'
 
 export class FacebookAuthenticationService {
   constructor (private readonly loadFacebookUserApi: LoadFacebookUserApi) {}
 
-  async perform (params: FacebookAuthentication.Params): Promise<void> {
-    this.loadFacebookUserApi.loadUser(params)
+  async perform (params: FacebookAuthentication.Params): Promise<any> {
+    const res = await this.loadFacebookUserApi.loadUser(params)
+    if (res === undefined) {
+      return new AuthenticationError()
+    }
   }
 }

@@ -1,5 +1,5 @@
 import { AuthenticationError } from '@/domain/errors'
-import { LoadFacebookUserApi } from '../protocols/load-facebook-user-api'
+import { LoadFacebookUserApi } from '../contracts/apis/facebook'
 import { FacebookAuthenticationService } from './facebook-authentication'
 
 class LoadFacebookUserApiSpy implements LoadFacebookUserApi {
