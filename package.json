@@ -7,7 +7,10 @@
     "start": "node dist/main/api",
     "build": "rimraf dist && tsc -p tsconfig-build.json",
     "lint": "eslint .",
-    "lint:fix": "npm run lint -- --fix"
+    "lint:fix": "npm run lint -- --fix",
+    "test": "jest --passWithNoTests --no-cache --runInBand",
+    "test:watch": "npm test -- --watch",
+    "test:coverage": "npm test -- --coverage"
   },
   "repository": {
     "type": "git",
@@ -21,10 +24,13 @@
   },
   "homepage": "https://github.com/DiegoSalas27/Advanced-NodeJS#readme",
   "devDependencies": {
+    "@types/jest": "^28.1.7",
     "@types/module-alias": "^2.0.1",
     "@types/node": "^18.7.5",
     "eslint-config-standard-with-typescript": "^22.0.0",
+    "jest": "^28.1.3",
     "rimraf": "^3.0.2",
+    "ts-jest": "^28.0.8",
     "typescript": "^4.7.4"
   },
   "engines": {
