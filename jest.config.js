@@ -12,7 +12,8 @@ module.exports = {
   ],
   transform: {
     '\\.ts$': 'ts-jest'
-  }
+  },
+  clearMocks: true
 
   // A list of reporter names that Jest uses when writing coverage reports
   // coverageReporters: [
