@@ -1,4 +1,5 @@
 import { LoadFacebookUserApi } from '@/data/contracts/apis'
+import { HttpGetClient } from '../http'
 
 export class FacebookApi {
   private readonly baseUrl = 'https://graph.facebook.com'
@@ -18,16 +19,5 @@ export class FacebookApi {
         grant_type: 'client_credentials'
       }
     })
-  }
-}
-
-export interface HttpGetClient {
-  get: (params: HttpGetClient.Params) => Promise<void>
-}
-
-export namespace HttpGetClient {
-  export interface Params {
-    url: string
-    params: object
   }
 }
