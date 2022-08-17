@@ -8,7 +8,7 @@ import {
   LoadUserAccountRepository
 } from '../contracts/db'
 
-export class FacebookAuthenticationService {
+export class FacebookAuthenticationService implements FacebookAuthentication {
   constructor (
     private readonly facebookApi: LoadFacebookUserApi,
     private readonly crypto: TokenGenerator,
@@ -16,7 +16,7 @@ export class FacebookAuthenticationService {
     SaveFacebookAccountRepository
   ) {}
 
-  async perform (params: FacebookAuthentication.Params): Promise<any> {
+  async perform (params: FacebookAuthentication.Params): Promise<FacebookAuthentication.Result> {
     const fbData = await this.facebookApi.loadUser(params)
     if (fbData === undefined) {
       return new AuthenticationError()
@@ -28,6 +28,7 @@ export class FacebookAuthenticationService {
     // the service is just an orquestrator of bussines logic rules
     const fbAccount = new FacebookAccount(fbData, accountData)
     const { id } = await this.userAccountRepo.saveWithFacebook(fbAccount)
-    await this.crypto.generateToken({ key: id, expirationInMs: AccessToken.expirationInMs })
+    const token = await this.crypto.generateToken({ key: id, expirationInMs: AccessToken.expirationInMs })
+    return new AccessToken(token)
   }
 }
