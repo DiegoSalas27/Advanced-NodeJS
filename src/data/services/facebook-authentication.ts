@@ -2,6 +2,7 @@ import { AuthenticationError } from '@/domain/errors'
 import { FacebookAuthentication } from '@/domain/features'
 import { FacebookAccount } from '@/domain/models'
 import { LoadFacebookUserApi } from '../contracts/apis'
+import { TokenGenerator } from '../contracts/crypto'
 import {
   SaveFacebookAccountRepository,
   LoadUserAccountRepository
@@ -10,6 +11,7 @@ import {
 export class FacebookAuthenticationService {
   constructor (
     private readonly facebookApi: LoadFacebookUserApi,
+    private readonly crypto: TokenGenerator,
     private readonly userAccountRepo: LoadUserAccountRepository &
     SaveFacebookAccountRepository
   ) {}
@@ -25,6 +27,7 @@ export class FacebookAuthenticationService {
     // applying business rules into domain models
     // the service is just an orquestrator of bussines logic rules
     const fbAccount = new FacebookAccount(fbData, accountData)
-    await this.userAccountRepo.saveWithFacebook(fbAccount)
+    const { id } = await this.userAccountRepo.saveWithFacebook(fbAccount)
+    await this.crypto.generateToken({ key: id })
   }
 }
