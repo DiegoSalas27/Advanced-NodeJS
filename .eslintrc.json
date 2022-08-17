@@ -6,6 +6,7 @@
   "rules": {
     "@typescript-eslint/no-namespace": "off",
     "@typescript-eslint/no-floating-promises": "off",
-    "@typescript-eslint/naming-convention": "off"
+    "@typescript-eslint/naming-convention": "off",
+    "@typescript-eslint/restrict-template-expressions": "off"
   }
 }
