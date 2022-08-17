@@ -22,6 +22,8 @@ export class FacebookAuthenticationService {
     const accountData = await this.userAccountRepo.load({
       email: fbData.email
     })
+    // applying business rules into domain models
+    // the service is just an orquestrator of bussines logic rules
     const fbAccount = new FacebookAccount(fbData, accountData)
     await this.userAccountRepo.saveWithFacebook(fbAccount)
   }
