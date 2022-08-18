@@ -8,6 +8,7 @@ import { PgUser } from '../entities'
 type LoadParams = LoadUserAccountRepository.Params
 type LoadResult = LoadUserAccountRepository.Result
 type SaveParams = SaveFacebookAccountRepository.Params
+type SaveResult = SaveFacebookAccountRepository.Result
 
 export class PgUserAccountRepository
 implements LoadUserAccountRepository, SaveFacebookAccountRepository {
@@ -27,7 +28,7 @@ implements LoadUserAccountRepository, SaveFacebookAccountRepository {
 
   async saveWithFacebook (
     params: SaveParams
-  ): Promise<any> {
+  ): Promise<SaveResult> {
     const saveDto = {
       ...(params.id && { id: +params.id }),
       ...(!params.id && { email: params.email }),
@@ -35,6 +36,9 @@ implements LoadUserAccountRepository, SaveFacebookAccountRepository {
       facebookId: params.facebookId
     }
 
-    await this.pgUserRepo.save(saveDto)
+    const savedUser = await this.pgUserRepo.save(saveDto)
+    return {
+      id: savedUser.id.toString()
+    }
   }
 }
