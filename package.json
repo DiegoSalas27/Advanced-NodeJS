@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/DiegoSalas27/Advanced-NodeJS#readme",
   "devDependencies": {
+    "@types/axios": "^0.14.0",
     "@types/jest": "^28.1.7",
     "@types/module-alias": "^2.0.1",
     "@types/node": "^18.7.5",
@@ -42,6 +43,7 @@
     "node": "16.x"
   },
   "dependencies": {
+    "axios": "^0.27.2",
     "module-alias": "^2.2.2"
   }
 }
