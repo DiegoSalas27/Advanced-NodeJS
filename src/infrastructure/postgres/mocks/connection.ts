@@ -1,6 +1,6 @@
-import { newDb } from 'pg-mem'
+import { newDb, IMemoryDb } from 'pg-mem'
 
-export const makeFakeDb = async (entities?: any[]): Promise<any> => {
+export const makeFakeDb = async (entities?: any[]): Promise<IMemoryDb> => {
   const db = newDb()
   const connection = await db.adapters.createTypeormConnection({
     type: 'postgres',
@@ -9,5 +9,5 @@ export const makeFakeDb = async (entities?: any[]): Promise<any> => {
 
   await connection.synchronize()
 
-  return connection
+  return db
 }

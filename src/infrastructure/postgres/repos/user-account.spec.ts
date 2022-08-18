@@ -1,25 +1,27 @@
-import { getRepository, Repository } from 'typeorm'
+import { IBackup } from 'pg-mem'
+import { getConnection, getRepository, Repository } from 'typeorm'
 import { PgUser } from '../entities'
 import { makeFakeDb } from '../mocks/connection'
 import { PgUserAccountRepository } from './user-account'
 
 describe('PgUserAccountRepository', () => {
   let sut: PgUserAccountRepository
-  let connection: any
+  let backup: IBackup
   let pgUserRepo: Repository<PgUser>
 
   beforeAll(async () => {
-    connection = await makeFakeDb([PgUser])
+    const db = await makeFakeDb([PgUser])
+    backup = db.backup()
     pgUserRepo = getRepository(PgUser)
   })
 
   beforeEach(async () => {
+    backup.restore()
     sut = new PgUserAccountRepository()
-    await pgUserRepo.clear()
   })
 
   afterAll(async () => {
-    await connection.close()
+    await getConnection().close()
   })
 
   describe('load', () => {
@@ -35,6 +37,20 @@ describe('PgUserAccountRepository', () => {
       const account = await sut.load({ email: 'any_email' })
 
       expect(account).toBeUndefined()
+    })
+  })
+
+  describe('saveWithFacebook', () => {
+    test('Should create an account if id is undefined', async () => {
+      await sut.saveWithFacebook({
+        email: 'any_email',
+        name: 'any_name',
+        facebookId: 'any_fb_id'
+      })
+
+      const pgUser = await pgUserRepo.findOne({ email: 'any_email' })
+
+      expect(pgUser?.id).toBe(1)
     })
   })
 })
