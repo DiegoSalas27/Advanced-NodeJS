@@ -1,35 +1,18 @@
-import { Entity, PrimaryGeneratedColumn, Column, getRepository, Repository } from 'typeorm'
 import { newDb } from 'pg-mem'
-import { LoadUserAccountRepository } from '@/data/contracts/repos'
+import { getRepository, Repository } from 'typeorm'
+import { PgUser } from '../entities'
+import { PgUserAccountRepository } from './user-account'
 
-class PgUserAccountRepository implements LoadUserAccountRepository {
-  async load (
-    params: LoadUserAccountRepository.Params
-  ): Promise<LoadUserAccountRepository.Result> {
-    const pgUserRepo = getRepository(PgUser)
-    const pgUser = await pgUserRepo.findOne({ where: { email: params.email } })
-    if (pgUser !== undefined) {
-      return {
-        id: pgUser.id.toString(),
-        name: pgUser.name ?? undefined
-      }
-    }
-  }
-}
+const makeFakeDb = async (entities?: any[]): Promise<any> => {
+  const db = newDb()
+  const connection = await db.adapters.createTypeormConnection({
+    type: 'postgres',
+    entities: entities ?? ['src/infrastructure/postgres/entities/index.ts']
+  })
 
-@Entity({ name: 'usuarios' })
-class PgUser {
-  @PrimaryGeneratedColumn()
-    id!: number
+  await connection.synchronize()
 
-  @Column({ name: 'nome', nullable: true })
-    name?: string
-
-  @Column()
-    email!: string
-
-  @Column({ name: 'id_facebook', nullable: true })
-    facebookId?: string
+  return connection
 }
 
 describe('PgUserAccountRepository', () => {
@@ -38,13 +21,7 @@ describe('PgUserAccountRepository', () => {
   let pgUserRepo: Repository<PgUser>
 
   beforeAll(async () => {
-    const db = newDb()
-    connection = await db.adapters.createTypeormConnection({
-      type: 'postgres',
-      entities: [PgUser]
-    })
-
-    await connection.synchronize()
+    connection = await makeFakeDb([PgUser])
     pgUserRepo = getRepository(PgUser)
   })
 
