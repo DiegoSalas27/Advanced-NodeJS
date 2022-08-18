@@ -19,10 +19,14 @@ export class PgUserAccountRepository implements LoadUserAccountRepository, SaveF
   async saveWithFacebook (params: SaveFacebookAccountRepository.Params):
   Promise<any> {
     const pgUserRepo = getRepository(PgUser)
-    await pgUserRepo.save({
-      email: params.email,
+
+    const saveDto = {
+      ...(params.id && { id: +params.id }),
+      ...(!params.id && { email: params.email }),
       name: params.name,
-      facebookId: params.email
-    })
+      facebookId: params.facebookId
+    }
+
+    await pgUserRepo.save(saveDto)
   }
 }
