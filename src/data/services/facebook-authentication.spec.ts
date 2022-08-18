@@ -4,7 +4,7 @@ import { LoadFacebookUserApi } from '../contracts/apis'
 import {
   LoadUserAccountRepository,
   SaveFacebookAccountRepository
-} from '../contracts/db'
+} from '../contracts/repo'
 import { FacebookAuthenticationService } from './facebook-authentication'
 import { FacebookAccount } from '@/domain/models/facebook-account'
 import { TokenGenerator } from '../contracts/crypto'

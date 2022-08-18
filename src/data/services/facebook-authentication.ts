@@ -6,7 +6,7 @@ import { TokenGenerator } from '../contracts/crypto'
 import {
   SaveFacebookAccountRepository,
   LoadUserAccountRepository
-} from '../contracts/db'
+} from '../contracts/repo'
 
 export class FacebookAuthenticationService implements FacebookAuthentication {
   constructor (
