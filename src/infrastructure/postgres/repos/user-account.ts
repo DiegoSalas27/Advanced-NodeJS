@@ -1,13 +1,22 @@
-import { LoadUserAccountRepository, SaveFacebookAccountRepository } from '@/data/contracts/repos'
+import {
+  LoadUserAccountRepository,
+  SaveFacebookAccountRepository
+} from '@/data/contracts/repos'
 import { getRepository } from 'typeorm'
 import { PgUser } from '../entities'
 
-export class PgUserAccountRepository implements LoadUserAccountRepository, SaveFacebookAccountRepository {
-  async load (
-    params: LoadUserAccountRepository.Params
-  ): Promise<LoadUserAccountRepository.Result> {
-    const pgUserRepo = getRepository(PgUser)
-    const pgUser = await pgUserRepo.findOne({ where: { email: params.email } })
+type LoadParams = LoadUserAccountRepository.Params
+type LoadResult = LoadUserAccountRepository.Result
+type SaveParams = SaveFacebookAccountRepository.Params
+
+export class PgUserAccountRepository
+implements LoadUserAccountRepository, SaveFacebookAccountRepository {
+  private readonly pgUserRepo = getRepository(PgUser)
+
+  async load (params: LoadParams): Promise<LoadResult> {
+    const pgUser = await this.pgUserRepo.findOne({
+      where: { email: params.email }
+    })
     if (pgUser !== undefined) {
       return {
         id: pgUser.id.toString(),
@@ -16,10 +25,9 @@ export class PgUserAccountRepository implements LoadUserAccountRepository, SaveF
     }
   }
 
-  async saveWithFacebook (params: SaveFacebookAccountRepository.Params):
-  Promise<any> {
-    const pgUserRepo = getRepository(PgUser)
-
+  async saveWithFacebook (
+    params: SaveParams
+  ): Promise<any> {
     const saveDto = {
       ...(params.id && { id: +params.id }),
       ...(!params.id && { email: params.email }),
@@ -27,6 +35,6 @@ export class PgUserAccountRepository implements LoadUserAccountRepository, SaveF
       facebookId: params.facebookId
     }
 
-    await pgUserRepo.save(saveDto)
+    await this.pgUserRepo.save(saveDto)
   }
 }
