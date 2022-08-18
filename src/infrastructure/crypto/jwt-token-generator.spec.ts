@@ -8,6 +8,7 @@ describe('JwtTokenGenerator', () => {
   let fakeJwt: jest.Mocked<typeof jwt>
   beforeAll(() => {
     fakeJwt = jwt as jest.Mocked<typeof jwt>
+    fakeJwt.sign.mockImplementation(() => 'any_token')
   })
 
   beforeEach(() => {
@@ -18,5 +19,11 @@ describe('JwtTokenGenerator', () => {
     await sut.generateToken({ key: 'any_key', expirationInMs: 1000 })
 
     expect(fakeJwt.sign).toHaveBeenCalledWith({ key: 'any_key' }, 'any_secret', { expiresIn: 1 })
+  })
+
+  test('Should return a token on success', async () => {
+    const token = await sut.generateToken({ key: 'any_key', expirationInMs: 1000 })
+
+    expect(token).toBe('any_token')
   })
 })
