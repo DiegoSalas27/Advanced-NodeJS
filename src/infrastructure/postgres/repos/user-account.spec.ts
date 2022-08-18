@@ -1,19 +1,7 @@
-import { newDb } from 'pg-mem'
 import { getRepository, Repository } from 'typeorm'
 import { PgUser } from '../entities'
+import { makeFakeDb } from '../mocks/connection'
 import { PgUserAccountRepository } from './user-account'
-
-const makeFakeDb = async (entities?: any[]): Promise<any> => {
-  const db = newDb()
-  const connection = await db.adapters.createTypeormConnection({
-    type: 'postgres',
-    entities: entities ?? ['src/infrastructure/postgres/entities/index.ts']
-  })
-
-  await connection.synchronize()
-
-  return connection
-}
 
 describe('PgUserAccountRepository', () => {
   let sut: PgUserAccountRepository
